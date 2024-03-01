@@ -21,7 +21,9 @@ export class MainComponent implements OnInit {
     this.categories$ = this.prodSvc.getProductCategories()
   }
 
-  viewCatetory(category: string) {
+  viewCategory(category: string) {
+
+    console.log(category)
     this.router.navigate(['/category', category])
   }
 

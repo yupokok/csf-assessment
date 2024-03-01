@@ -24,4 +24,8 @@ export class CategoryComponent implements OnInit {
     this.category = this.activatedRoute.snapshot.params['category']
     this.products$ = this.prodSvc.getProductsByCategory(this.category)
   }
+
+  
+
+
 }
