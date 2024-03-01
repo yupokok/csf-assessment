@@ -1,16 +1,24 @@
 package vttp.batch4.csf.ecommerce.controllers;
 
+import java.io.StringReader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import vttp.batch4.csf.ecommerce.models.Order;
 import vttp.batch4.csf.ecommerce.services.PurchaseOrderService;
 
 @Controller
-@RequestMapping(path="/api", consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api")
 public class OrderController {
 
   @Autowired
@@ -19,39 +27,26 @@ public class OrderController {
   // IMPORTANT: DO NOT MODIFY THIS METHOD.
   // If this method is changed, any assessment task relying on this method will
   // not be marked
-  public ResponseEntity<String> postOrder() {
+  @PostMapping(path = "/order", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public ResponseEntity<String> postOrder(@RequestBody String payload) {
 
-    
+    System.out.printf(">>> POST payload: %s\n", payload);
+    JsonReader reader = Json.createReader(new StringReader(payload));
+    JsonObject json = reader.readObject();
 
-    // TODO Task 3
-	 
-	 return null;
+    Order order = new Order();
+    order.setAddress(json.getString("address"));
+    order.setName(json.getString("name"));
+    order.setComments(json.getString("comments"));
+    order.setPriority(json.getBoolean("priority"));
+    order.getOrderId();
+
+    poSvc.createNewPurchaseOrder(order);
+     JsonObject resp = Json.createObjectBuilder()
+      .add("status", 200)
+      .build();
+      
+      return ResponseEntity.ok(resp.toString());
   }
 }
-
-
-// @PostMapping(path="/friend", consumes = MediaType.APPLICATION_JSON_VALUE)
-// 	@ResponseBody
-// 	public ResponseEntity<String> postFriend(@RequestBody String payload) {
-
-// 		System.out.printf(">>> POST payload: %s\n", payload);
-
-// 		Friend f = Friend.toFriend(payload);
-
-// 		if (friendsSvc.add(f)) {
-// 			JsonObject resp = Json.createObjectBuilder()
-// 					.add("status", 200)
-// 					.build();
-
-// 			// 200 -> then()
-// 			return ResponseEntity.ok(resp.toString());
-// 		}
-
-// 		JsonObject err = Json.createObjectBuilder()
-// 				.add("message", "Cannot add friend")
-// 				.add("status", 400)
-// 				.build();
-
-// 		// 400 -> catch()
-// 		return ResponseEntity.status(400).body(err.toString());
-// 	}

@@ -63,10 +63,13 @@ export class ConfirmCheckoutComponent implements OnInit {
     }
     console.info('>>> order: ', order)
     this.prodSvc.checkout(order)
+      .then(resp => {
+        console.info('resp: ', resp)
+      })
+      .catch(resp => {
+        alert(`ADD ERROR: ${resp.error.message}`)
+      })
+  }
+    
   }
 
-  processCart(lineItem: LineItem[]){
-    console.log("processing order", lineItem)
-  }
-  
-}

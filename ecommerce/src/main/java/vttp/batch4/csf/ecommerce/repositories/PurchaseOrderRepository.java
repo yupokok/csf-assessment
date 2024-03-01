@@ -16,7 +16,14 @@ public class PurchaseOrderRepository {
   // If this method is changed, any assessment task relying on this method will
   // not be marked
   // You may only add Exception to the method's signature
+
+  public static final String SQL_CREATE_PURCHASE_ORDER = """
+    insert into orders(orderId, name, date, address, priority, comments, cart)
+       values (?, ?, ?, ?, ?, ?, ?)
+ """;
+
   public void create(Order order) {
-    // TODO Task 3
+      template.update(SQL_CREATE_PURCHASE_ORDER
+            , order.getOrderId(), order.getName(), order.getAddress(), order.getPriority(), order.getComments(), order.getCart().toString());
+   }
   }
-}

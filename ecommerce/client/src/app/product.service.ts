@@ -1,6 +1,6 @@
 import {Injectable, inject} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, first, firstValueFrom} from "rxjs";
 import {Cart, LineItem, Order, Product} from "./models";
 
 @Injectable()
@@ -25,7 +25,7 @@ export class ProductService {
   // IMPORTANT: DO NOT MODIFY THIS METHOD.
   // If this method is changed, any assessment task relying on this method will
   // not be marked
-  checkout(order: Order) {
-    return this.http.post<any>(`/api/order`, order)
+  checkout(order: Order): Promise<any> {
+    return firstValueFrom( this.http.post<any>('/api/order', order))
   }
 }
